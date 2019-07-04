@@ -1,0 +1,40 @@
+---
+- name: install basic linux packages
+  yum:
+    name: "{{package}}"
+    state: latest
+  vars:
+    package:
+    - tree
+    - jq
+    - vim
+    - https://dl.grafana.com/oss/release/grafana-5.4.2-1.x86_64.rpm
+  when: ansible_distribution == 'Amazon'
+  tags:
+   - install
+
+- name: reload service grafana
+  systemd:
+     name: grafana-server
+     state: started
+     enabled: yes
+
+- name: check azure monitor plugin
+  shell: grafana-cli plugins ls|grep azure-monitor|wc -l
+  register: azure_monitor_plugin
+
+- name: check gauge plugin
+  shell: grafana-cli plugins ls|grep briangann-gauge-panel|wc -l
+  register: gauge_plugin
+
+- name: install azure monitor plugin
+  shell: grafana-cli plugins install grafana-azure-monitor-datasource
+  when: azure_monitor_plugin is defined and azure_monitor_plugin.stdout == "0"
+  notify: 
+    - "restart service grafana"
+
+- name: install gauge-panel plugin
+  shell: grafana-cli plugins install briangann-gauge-panel
+  when: gauge_plugin is defined and gauge_plugin.stdout == "0"
+  notify: 
+    - "restart service grafana"
