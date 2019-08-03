@@ -1,0 +1,13 @@
+[Unit]
+Description=prometheus
+After=network.target docker.socket
+
+[Service]
+RestartSec=10
+Restart=always
+TimeoutStartSec=90
+
+ExecStart=/home/ec2-user/prometheus/prometheus --config.file=/home/ec2-user/prometheus.yaml
+
+[Install]
+WantedBy=multi-user.target

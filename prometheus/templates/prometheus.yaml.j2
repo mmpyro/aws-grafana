@@ -1,0 +1,27 @@
+global:
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      # - alertmanager:9093
+
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+    - targets: ['localhost:9090']
+  - job_name: 'cadvisor'
+    scrape_interval: 5s
+    static_configs:
+    - targets: ['13.69.72.62:8085','13.69.72.62:8086','13.69.72.62:8087']
+  - job_name: 'node'
+    scrape_interval: 5s
+    static_configs:
+    - targets: ['13.69.72.62:9104','13.69.72.62:9105','13.69.72.62:9106', '13.69.74.42:9100','13.69.74.42:9101','13.69.74.42:9102']
