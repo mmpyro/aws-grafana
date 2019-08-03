@@ -8,7 +8,7 @@
     - tree
     - jq
     - vim
-    - https://dl.grafana.com/oss/release/grafana-5.4.2-1.x86_64.rpm
+    - https://dl.grafana.com/oss/release/grafana-6.2.5-1.x86_64.rpm
   when: ansible_distribution == 'Amazon'
   tags:
    - install
